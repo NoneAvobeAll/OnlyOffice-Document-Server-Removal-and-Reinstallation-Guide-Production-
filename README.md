@@ -83,8 +83,8 @@ Remove only OnlyOffice–specific directories; preserve other packages:
 
 ```bash
 sudo rm -rf /var/www/onlyoffice
-sudo rm -rf /etc/onlyoffice/documentserver-example
-sudo rm -rf /etc/onlyoffice/documentserver/nginx
+sudo rm -rf /etc/onlyoffice/
+sudo rm -rf /var/lib/onlyoffice
 sudo rm -rf /etc/nginx/includes/ds.conf
 ```
 
@@ -116,7 +116,7 @@ sudo -i -u postgres psql -c "DROP DATABASE IF EXISTS onlyoffice;"
 sudo -i -u postgres psql -c "DROP USER IF EXISTS onlyoffice;"
 ```
 
-Proceed with installation and database creation:
+Proceed with installation and database creation: [If already exists **skip**.]
 
 ```bash
 sudo apt update
@@ -186,6 +186,7 @@ sudo apt install onlyoffice-documentserver
    ```bash
    sudo cp ~/backup/ds.conf_$(date +%F) /etc/nginx/conf.d/ds.conf
    ```
+   make changes like (Secrets)
 4. **Validate and reload NGINX**:
 
    ```bash
