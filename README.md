@@ -180,18 +180,16 @@ sudo apt install onlyoffice-documentserver
 
    ```bash
    sudo cp local.json local.json.bak 
-   sudo cp default.json defult.json.bak 
+   sudo cp default.json defult.json.bak
+   [Change PrivateIPblock = false and AllowPrivateIP = true inside default.json]
    ```
-  _ **[Change PrivateIPblock = false and AllowPrivateIP = true inside default.json]**_
-   
-3. **Merge custom settings** (e.g., storage paths, SSL setups) back into `local.json`.
-4. **Restore custom NGINX config**:
+2. **Restore custom NGINX config**:
 
    ```bash
    sudo cp ~/backup/ds.conf_$(date +%F) /etc/nginx/conf.d/ds.conf
    ```
    make changes like (Secrets)
-5. **Validate and reload NGINX**:
+3. **Validate and reload NGINX**:
 
    ```bash
    sudo nginx -t && sudo systemctl reload nginx
@@ -210,12 +208,10 @@ sudo apt install onlyoffice-documentserver
    sudo ss -tulwn | grep 8088
    ```
 3. **Functional Test**: Open `http://<server-ip>:8088/` in browser and verify editor loads.
-4. 
 
 ## 9. Documentation & Audit
 
 * Record actual ports, paths, and any deviations in runbook.
 * Notify stakeholders and update CMDB.
-
 ---
 © 2025 Abubakkar | System Admin
