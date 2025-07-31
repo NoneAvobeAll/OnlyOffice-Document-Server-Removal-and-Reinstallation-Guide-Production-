@@ -60,6 +60,7 @@ sudo apt purge onlyoffice-documentserver-ee
 ```bash
 sudo apt purge onlyoffice-documentserver
 ```
+[Do not run autoremove command it can break production] 
 
 #### 5.2.1 NGINX `ds.conf` Pre-Removal Error
 
@@ -68,14 +69,15 @@ sudo apt purge onlyoffice-documentserver
   ```text
   unlink: cannot unlink '/etc/nginx/conf.d/ds.conf': No such file or directory
   ```
+Address the error accordingly. DPKG errors can vary.
 * **Remediation:**
 
 ```bash
-sudo mkdir -p /etc/nginx/conf.d
 sudo touch /etc/nginx/conf.d/ds.conf
 sudo dpkg --configure -a
 sudo apt purge onlyoffice-documentserver
 ```
+[Do not run autoremove command it can break production] 
 
 #### 5.2.2 Manual Cleanup (No `autoremove`)
 
@@ -83,7 +85,7 @@ Remove only OnlyOffice–specific directories; preserve other packages:
 
 ```bash
 sudo rm -rf /var/www/onlyoffice
-sudo rm -rf /etc/onlyoffice/
+sudo rm -rf /etc/onlyoffice
 sudo rm -rf /var/lib/onlyoffice
 sudo rm -rf /etc/nginx/includes/ds.conf
 ```
@@ -131,7 +133,7 @@ sudo -i -u postgres psql -c "CREATE USER onlyoffice WITH PASSWORD 'onlyoffice';"
 sudo -i -u postgres psql -c "CREATE DATABASE onlyoffice OWNER onlyoffice;"
 ```
 
-#### 7.1.2 RabbitMQ
+#### 7.1.2 RabbitMQ  [If installed no need, **Skip**]
 
 ```bash
 sudo apt install rabbitmq-server
@@ -177,17 +179,19 @@ sudo apt install onlyoffice-documentserver
 1. **Backup new configs**:
 
    ```bash
-   sudo cp /etc/onlyoffice/documentserver/local.json \
-       /etc/onlyoffice/documentserver/local.json.default
+   sudo cp local.json local.json.bak 
+   sudo cp default.json defult.json.bak 
    ```
-2. **Merge custom settings** (e.g., storage paths, SSL setups) back into `local.json`.
-3. **Restore custom NGINX config**:
+  _ **[Change PrivateIPblock = false and AllowPrivateIP = true inside default.json]**_
+   
+3. **Merge custom settings** (e.g., storage paths, SSL setups) back into `local.json`.
+4. **Restore custom NGINX config**:
 
    ```bash
    sudo cp ~/backup/ds.conf_$(date +%F) /etc/nginx/conf.d/ds.conf
    ```
    make changes like (Secrets)
-4. **Validate and reload NGINX**:
+5. **Validate and reload NGINX**:
 
    ```bash
    sudo nginx -t && sudo systemctl reload nginx
@@ -206,6 +210,7 @@ sudo apt install onlyoffice-documentserver
    sudo ss -tulwn | grep 8088
    ```
 3. **Functional Test**: Open `http://<server-ip>:8088/` in browser and verify editor loads.
+4. 
 
 ## 9. Documentation & Audit
 
